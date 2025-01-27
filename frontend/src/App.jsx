@@ -4,6 +4,8 @@ import MiddleNavbar from "./components/middle-navbar";
 import TopNavbar from "./components/top-navbar";
 import BottomNavbar from "./components/bottom-navbar";
 import HeroSsectionSlider from "./components/hero-section-slider";
+import FeaturesCategoriesSection from "./components/features-categories-section";
+import BannerSection from "./components/banner-section";
 
 
 
@@ -16,6 +18,8 @@ export default function App() {
       <BottomNavbar/>
       <hr className="text-gray-200"/>
       <HeroSsectionSlider/>
+      <FeaturesCategoriesSection/>
+      <BannerSection/>
     </div>
   );
 }
