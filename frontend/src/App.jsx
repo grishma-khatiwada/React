@@ -6,6 +6,7 @@ import BottomNavbar from "./components/bottom-navbar";
 import HeroSsectionSlider from "./components/hero-section-slider";
 import FeaturesCategoriesSection from "./components/features-categories-section";
 import BannerSection from "./components/banner-section";
+import PopularProductsSection from "./components/popular-products-section";
 
 
 
@@ -13,13 +14,14 @@ import BannerSection from "./components/banner-section";
 export default function App() {
   return (
     <div className="space-y-4">
-      <TopNavbar />
+      {/* <TopNavbar />
       <MiddleNavbar />
       <BottomNavbar/>
       <hr className="text-gray-200"/>
       <HeroSsectionSlider/>
       <FeaturesCategoriesSection/>
-      <BannerSection/>
+      <BannerSection/> */}
+      <PopularProductsSection/>
     </div>
   );
 }
