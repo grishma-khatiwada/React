@@ -125,7 +125,7 @@ export default function PopularProductsSection() {
   ];
 
   return (
-    <div className="w-8/12 mx-auto mt-24  space-y-8">
+    <div className=" w-8/12 md:w-8/12 mx-auto mt-24  space-y-8">
       <p className="text-2xl font-semibold">Popular Products</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 ">

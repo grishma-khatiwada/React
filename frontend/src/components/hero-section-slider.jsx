@@ -15,16 +15,16 @@ import two from "../../public/slide2.png";
 export default function HeroSsectionSlider() {
   return (
     <div>
-      <Swiper pagination={true} modules={[Pagination]} className="mySwiper w-8/12 mx-auto rounded-md ">
-        <SwiperSlide>
+      <Swiper pagination={true} modules={[Pagination]} className="mySwiper w-11/12 md:w-8/12 mx-auto rounded-md ">
+        <SwiperSlide className="8/12 mx-auto rounded-md ">
           <img 
-          className="h-[65vh] object-cover"
+          className=" md:h-[65vh] object-cover"
           src={one} alt="slider-image" />
         </SwiperSlide>
 
         <SwiperSlide>
           <img
-          className="h-[65vh] object-cover"
+          className="md:h-[65vh] object-cover"
           src={two} alt="Slider-image" />
         </SwiperSlide>
       </Swiper>
