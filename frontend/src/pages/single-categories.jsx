@@ -1,9 +1,8 @@
 import React from "react";
+import SingleProductCard from "../components/single-product-card";
 import myImage from "../../public/categories.jpeg";
-import ReactStars from "react-stars";
-import SingleProductCard from "./single-product-card";
 
-export default function PopularProductsSection() {
+export default function SingleCategories() {
   const products = [
     {
       image: myImage,
@@ -126,12 +125,14 @@ export default function PopularProductsSection() {
   ];
 
   return (
-    <div className=" w-8/12 md:w-8/12 mx-auto mt-24  space-y-8">
-      <p className="text-2xl font-semibold">Popular Products</p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 ">
+    <div className=" w-8/12 mx-auto">
+      <div className=" bg-gray-300 py-24 text-5xl font-semibold text-center">
+        Snacks and Munchines
+      </div>
+      {/*  */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
         {products.map((eachItem, index) => (
-          <SingleProductCard eachItem={eachItem} key={index} />
+          <SingleProductCard eachItem={eachItem} key={index} />   //props passing(parent's property acces by child)
         ))}
       </div>
     </div>

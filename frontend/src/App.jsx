@@ -20,10 +20,9 @@ export default function App() {
       
      
       */}
-       <TopNavbar />
+       {/* <TopNavbar />
        <MiddleNavbar />
-       <BottomNavbar/>
-       <hr className="text-gray-200"/>
+       <BottomNavbar/> */}
       <HeroSsectionSlider/>
        <FeaturesCategoriesSection/>
        <BannerSection/>
