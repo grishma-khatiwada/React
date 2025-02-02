@@ -18,10 +18,10 @@ export default function BottomNavbar() {
         <p>Shop</p>
         <p>Stores</p>
         <p className="whitespace-nowrap">Mega Menu</p>
-        <p>Pages</p>
+        <NavLink to={"/pages"}>Pages</NavLink>
         <p>Account</p>
         <NavLink to={"/dashboard"}>Dashboard</NavLink>
-        <NavLink to="/docs" >Docs</NavLink>
+        <NavLink to={"/docs"} >Docs</NavLink>
        </div>
         </div>
 

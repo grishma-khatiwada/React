@@ -10,6 +10,7 @@ import TopNavbar from './components/top-navbar.jsx';
 import MiddleNavbar from './components/middle-navbar.jsx';
 import BottomNavbar from './components/bottom-navbar.jsx';
 import Footer from './components/footer.jsx';
+import Pages from './pages/pages.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -29,6 +30,8 @@ createRoot(document.getElementById('root')).render(
       <Route path="/docs" element={<Docs/>}/>
       <Route path="/dashboard" element={<Dashboard/>}/>
       <Route path="/categories/:id" element={<SingleCategories/>}/>
+      <Route path="/pages" element={<Pages />} />
+
     </Routes>
 
     <Footer/>

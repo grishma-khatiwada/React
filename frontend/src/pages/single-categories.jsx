@@ -129,6 +129,7 @@ export default function SingleCategories() {
       <div className=" bg-gray-300 py-24 text-5xl font-semibold text-center">
         Snacks and Munchines
       </div>
+      
       {/*  */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
         {products.map((eachItem, index) => (
