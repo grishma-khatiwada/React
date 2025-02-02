@@ -5,12 +5,12 @@ import ReactStars from "react-stars";
 
 export default function ProductDescription() {
   return (
-    <div className='w-8/12 mx-auto grid grid-cols-2'>
+    <div className='w-8/12 mx-auto grid grid-cols-2 mt-4 '>
         <div>
             <img src={myImage} alt="" />
         </div>
 
-        <div className='space-y-2'>
+        <div className='space-y-2 ml-4'>
             <p className='text-xs text-green-500 font-semibold'>Snack & Munchines</p>
             <p className='text-3xl font-semibold'>Haldiram's Sev Bhujia</p>
 
