@@ -11,6 +11,11 @@ import MiddleNavbar from './components/middle-navbar.jsx';
 import BottomNavbar from './components/bottom-navbar.jsx';
 import Footer from './components/footer.jsx';
 import Pages from './pages/pages.jsx';
+import Account from './pages/account.jsx';
+import MegaMenu from './pages/megamenu.jsx';
+import Stores from './pages/stores.jsx';
+import Shop from './pages/shop.jsx';
+import ProductDescription from './pages/product-description.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -30,7 +35,15 @@ createRoot(document.getElementById('root')).render(
       <Route path="/docs" element={<Docs/>}/>
       <Route path="/dashboard" element={<Dashboard/>}/>
       <Route path="/categories/:id" element={<SingleCategories/>}/>
-      <Route path="/pages" element={<Pages />} />
+      <Route path="/pages" element={<Pages/>} />
+      <Route path="/account" element={<Account/>} />
+      <Route path="/megamenu" element={<MegaMenu/>} />
+      <Route path="/stores" element={<Stores/>} />
+      <Route path="/shop" element={<Shop/>} />
+
+      <Route path="/shop/:id" element={<ProductDescription/>} />
+
+ 
 
     </Routes>
 
