@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Shop() {
   return (
-    <div>this is shop pageS</div>
+    <div className='w-8/12 mx-auto'>this is shop pageS</div>
   )
 }
