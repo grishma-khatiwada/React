@@ -1,8 +1,8 @@
-import { StrictMode } from 'react'
+import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import Docs from './pages/docs.jsx';
 import Dashboard from './pages/dashboard.jsx';
 import SingleCategories from './pages/single-categories.jsx';
@@ -16,19 +16,25 @@ import MegaMenu from './pages/megamenu.jsx';
 import Stores from './pages/stores.jsx';
 import Shop from './pages/shop.jsx';
 import ProductDescription from './pages/product-description.jsx';
+import SignIn from "./pages/signin.jsx";
+import SignUp from './pages/signup.jsx';
 
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+export function Root(){
+  const location = useLocation()
 
-    <BrowserRouter>
 
+  return (
+    <StrictMode>
+
+{ location.pathname !== "/signin" && location.pathname !== "/signin" && 
    <div className='space-y-6'>
    <TopNavbar/>
     <MiddleNavbar/>
     <BottomNavbar/>
     <hr className="text-gray-200"/>
    </div>
+}
 
     <Routes>
       <Route path="/" element={<App />}/>
@@ -40,6 +46,9 @@ createRoot(document.getElementById('root')).render(
       <Route path="/megamenu" element={<MegaMenu/>} />
       <Route path="/stores" element={<Stores/>} />
       <Route path="/shop" element={<Shop/>} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+
 
       <Route path="/shop/:id" element={<ProductDescription/>} />
 
@@ -47,8 +56,12 @@ createRoot(document.getElementById('root')).render(
 
     </Routes>
 
-    <Footer/>
-    </BrowserRouter>
+    {location.pathname !== "/signin" && location.pathname !== "/signin" && <Footer/>}
+    
 
-  </StrictMode>,
-)
+  </StrictMode>
+
+  )
+
+}
+createRoot(document.getElementById("root")).render( <BrowserRouter>  <Root />  </BrowserRouter> );
