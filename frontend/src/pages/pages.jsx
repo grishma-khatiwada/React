@@ -88,7 +88,7 @@ export default function Pages() {
         <div className="w-500 rounded-xl overflow-hidden  ">
           <img
             className="w-full h-auto transform hover:scale-110 transition-all duration-400 object-cover"
-            src="../public/blog-img-1.jpg"
+            src={blogImageOne}
             alt=""
           />
         </div>

@@ -5,6 +5,14 @@ import {
   FaInstagram,
   FaShoppingCart,
 } from "react-icons/fa";
+import AppStore from "../../public/appstore-btn.svg"
+import GooglePlay from "../../public/googleplay-btn.svg"
+import Visa from "../../public/visa.svg"
+import PayPal from "../../public/paypal.svg"
+import MasterCard from "../../public/mastercard.svg"
+import AmazonPay from "../../public/amazonpay.svg"
+
+
 
 export default function Footer() {
   const footerSections = [
@@ -88,28 +96,28 @@ export default function Footer() {
               <p className="font-bold">Payment Partners</p>
 
               <img
-                src="../public/amazonpay.svg"
+                src={AmazonPay}
                 alt="Amazon Pay"
                 className="h-6"
               />
               <img
-                src="../public/mastercard.svg"
+                src={MasterCard}
                 alt="MasterCard"
                 className="h-6"
               />
-              <img src="../public/paypal.svg" alt="PayPal" className="h-6" />
-              <img src="../public/visa.svg" alt="Visa" className="h-6" />
+              <img src={PayPal} alt="PayPal" className="h-6" />
+              <img src={Visa} alt="Visa" className="h-6" />
             </div>
 
             <div className="flex space-x-4 mt-4 md:mt-0">
               <p className="font-bold ">Get deleveries with FreshCart</p>
               <img
-                src="../public/googleplay-btn.svg"
+                src={GooglePlay}
                 alt="Google Play"
                 className="h-8"
               />
               <img
-                src="../public/appstore-btn.svg"
+                src={AppStore}
                 alt="App Store"
                 className="h-8"
               />
