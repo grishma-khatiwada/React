@@ -7,17 +7,19 @@
 // Node.js (library) is the runtime prototype/protocol which is complex and has a lot of features.
 // Then Express js was introduced as the framework instead of core node.js.
 
-// API (Backend/Server)
+// API (Backend/Server)(waiter)
 // --> Application Programming Interface.
-// It serves as a bridge between frontend and databse.
+// It serves as a bridge between frontend(us/user) and databse(chef).
 
 
+// Nodejs is environemnt and its framework is express
 // Steps to create a backend server using Express.js
-1.Create a backend folder and go inside introduced
+
+1. Create a backend folder and go inside it
 2. npm init -y (package.json will created then)
-3. then install express (npm i express)
-4. npm i mongoose
-5.  "type": "module", Add this im package.json
+3. npm i express  (then install express)
+4. npm i mongoose (MongoDB is database,mongoose is language of that database)
+5. "type": "module", Add this in package.json
 6. npm i nodemon ---> Keeps the server running(nodemon server.js(yesle server chalaucha))
 
 // MongoDB 
