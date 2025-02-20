@@ -1,76 +1,151 @@
-import express from "express"
-import mongoose from "mongoose"
+import express from "express";
+import mongoose from "mongoose";
 
+// App configure
+const app = express();
 
-// configure the server
-// all the express() is fall under app now (from here app is my server)
-const app = express()
-app.use(express.json())
+// Middleware (in uilt middleware)
+app.use(express.json());
 
-
-
-// Connect to MongoDB Database
-
-try { 
-    mongoose.connect("mongodb+srv://grishmakhatiwada76:51wctfOI5wXU5sqv@cluster0.ltvtu.mongodb.net/ecommerce-db?retryWrites=true&w=majority&appName=Cluster0")
-    console.log("MongoDB Connection Success")
-    
+// Database Config
+try {
+  mongoose.connect(
+    "mongodb+srv://grishmakhatiwada76:ZaSYLoR9QzazOZzV@cluster0.inn1u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  );
 } catch (error) {
-    console.log("MongoDB Connection Error", error)
-    
+  console.log("Error in connecting to database", error);
 }
 
-// Product Schema (items for the product table)
+// Table Schema
 const productSchema = new mongoose.Schema({
-    name: {type: String , required: true},
-    description: {type: String, required: false},
-    price: {type: Number, required: true},
-    previousPrice: {type: Number, required: true},
-    imageUrl: {type: String, required: true},
-    category: {type: String , required: true},
-})
-// Make product table (MODEL)
-const Product = mongoose.model("Product", productSchema)
+  name: { type: String, required: true, unique: true },
+  description: { type: String, required: false },
+  price: { type: Number, required: true },
+  previousPrice: { type: Number, required: true },
+  imageUrl: { type: String, required: true },
+  category: { type: String, required: true },
+});
 
-// CRUD for product
+const Product = mongoose.model("Product", productSchema);
 
-// 1. Create a Product
-app.post( "/products", async(req,res)=>{
+// Product CRUD
+// 1. create(post) a product
+app.post("/products", async (req, res) => {
+  try {
 
-    try {
-        const newProduct = await new Product(req.body).save()
-        console.log(newProduct)
+    // Check if product name already taken or not
+    const productExist = await Product.findOne({name:req.body.name})
 
-        
-    } catch (error) {
-        console.log("Something Went Wrong", error)
-        
+    if(productExist){
+        return res.status(409).json({
+            message: "Name already taken,Please choose different name"
+        })
     }
 
-})
- 
-// ASYNC is permises // post mean to create something
 
 
+    const newProduct = await new Product(req.body).save();
+    return res.status(201).json({
+      message: "Product created succefully",
+      data: newProduct,
+    });
+  } catch (error) {
+    console.log("Error in creating a product", error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
 
+// Get all products
+app.get("/products", async (req, res) => {
 
+    try {
+        const allProducts = await Product.find()
+        return res.status(200).json({
+            message: "All product fetched successfully",
+            data: allProducts,
+        })
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error"
+        })
+        
+    }
+});
 
+// Get one products
+app.get("/products/:id", async (req, res) => {
 
-
-
-app.get("/", (req,res)=>{
-    res.send("server is working...")
-})
-
-app.get("/students", (req,res)=>{
-    res.send("100 students here...")
+    try {
+        const singleProduct = await Product.findById(req.params.id)
+        return res.status(200).json({
+            message: "Single Product fetched successfully",
+            data: singleProduct,
+        })
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error"
+        })
     
-    // check user
-    // search database
-    // send users
-})
+    }
 
-app.listen(4000, ()=>{
-    console.log("Server started at http://localhost:4000")
 
-})
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Update a product
+app.patch("/products/:id", async (req, res) => {});
+
+// Delete a product
+app.delete("/products/:id", async (req, res) => {
+  try {
+
+    const checkProduct = await Product.findById(req.params.id)
+    if (!checkProduct){
+      return res.status(404).json({
+        message: "Product not found"
+      })
+
+
+    }
+
+
+
+
+    const deteletdProduct = await Product.findByIdAndDelete(req.params.id)
+    return res.status(200).json({
+      message: " Product Deleted successfully",
+      data: deteletdProduct,
+  })
+    
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error"
+  })
+  }
+});
+
+
+
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+app.listen(4000, () => {
+  console.log("server is running on port 4000");
+});
