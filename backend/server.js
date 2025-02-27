@@ -1,5 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
+import { Product } from "./schema/productSchema.js";
+import { Category } from "./schema/categorySchema.js";
+// Middleware
+import multer from "multer";
+const upload = multer({ dest: 'uploads/' })
+
+
+
+
 
 // App configure
 const app = express();
@@ -15,28 +24,6 @@ try {
 } catch (error) {
   console.log("Error in connecting to database", error);
 }
-
-// Table Schema
-const productSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
-  description: { type: String, required: false },
-  price: { type: Number, required: true },
-  previousPrice: { type: Number, required: true },
-  imageUrl: { type: String, required: true },
-  category: { type: String, required: true },
-});
-// Table
-const Product = mongoose.model("Product", productSchema);
-
-// category schema
-const categorySchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
-  imageUrl: { type: String, required: true },
-});
-// catefory table
-const Category = mongoose.model("Category", categorySchema);
-
-
 
 // Product CRUD
 // 1. create(post) a product
@@ -98,9 +85,16 @@ app.get("/products/:id", async (req, res) => {
 // Update a product
 app.patch("/products/:id", async (req, res) => {
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body,{new: true} )
+
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body,{new: true})
+if (!updatedProduct){
+  return res.status(404).json({
+    message: "Product not found"
+  })
+}
+
     return res.status(200).json({
-      message: "Product updated  successfully",
+      message: "Product updated successfully",
       data: updatedProduct,
     });
     
@@ -111,13 +105,6 @@ app.patch("/products/:id", async (req, res) => {
   }
 
 });
-
-
-
-
-
-
-
 
 
 // Delete a product
@@ -150,8 +137,9 @@ app.delete("/products/:id", async (req, res) => {
 // Category CURD
 
 // Create a category
-app.post("/categories", async(req,res)=>{
+app.post("/categories", upload.single('imageUrl'), async(req,res)=>{
   try {
+    console.log(req.file)
 
     // Check if category is already taken
     const categoryExist = await Category.findOne({name: req.body.name})
@@ -178,10 +166,14 @@ app.post("/categories", async(req,res)=>{
 })
 
 
-
-
+// GET category
 app.get("/categories", async(req,res)=>{
   try {
+
+
+     // Handle the image upload before saving to database.
+
+
     const allCategories = await Category.find()
     return res.status(200).json({
       message:"All Product created succesfully",
@@ -220,8 +212,11 @@ app.get("/categories/:id", async(req,res)=>{
   }
   
 })
+
+
 app.patch("/categories/:id", async(req,res)=>{
-  try {
+  try { 
+    // find by id and update 
     const updatedCategory = await Category.findByIdAndUpdate (req.params.id, req.body, {new:true})
     return res.status(200).json({
       message: "Category updated succesfully",
@@ -236,6 +231,7 @@ app.patch("/categories/:id", async(req,res)=>{
   } 
 })
 
+
 app.delete("/categories/:id", async(req,res)=>{
   try {
     const deletedCategory = await Category.findByIdAndDelete(req.params.id)
@@ -246,7 +242,7 @@ app.delete("/categories/:id", async(req,res)=>{
     }
     return res.status(200).json({
       message: "Category daleted succesfully",
-      data: deletedCategoryCategory,
+      data: deletedCategory,
     })
     
   } catch (error) {
