@@ -2,13 +2,20 @@ import express from "express";
 import mongoose from "mongoose";
 import { Product } from "./schema/productSchema.js";
 import { Category } from "./schema/categorySchema.js";
-// Middleware
+// Middleware(Multer)
 import multer from "multer";
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ dest: "uploads/" });
 
+// cloudinary (Data storage)
+// v2 as clodinary is like remaining v2 as cloudinary
+import { v2 as cloudinary } from "cloudinary";
+import "dotenv/config"
 
-
-
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 // App configure
 const app = express();
@@ -19,7 +26,8 @@ app.use(express.json());
 // Database Config
 try {
   mongoose.connect(
-  "mongodb+srv://grishmakhatiwada76:ZaSYLoR9QzazOZzV@cluster0.inn1u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+    "mongodb+srv://grishmakhatiwada76:ZaSYLoR9QzazOZzV@cluster0.inn1u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  );
   console.log("MongoDB connected syccesfully");
 } catch (error) {
   console.log("Error in connecting to database", error);
@@ -81,31 +89,31 @@ app.get("/products/:id", async (req, res) => {
   }
 });
 
-
 // Update a product
 app.patch("/products/:id", async (req, res) => {
   try {
-
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body,{new: true})
-if (!updatedProduct){
-  return res.status(404).json({
-    message: "Product not found"
-  })
-}
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!updatedProduct) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
 
     return res.status(200).json({
       message: "Product updated successfully",
       data: updatedProduct,
     });
-    
   } catch (error) {
     return res.status(500).json({
-      message: "Internal server error", error
+      message: "Internal server error",
+      error,
     });
   }
-
 });
-
 
 // Delete a product
 app.delete("/products/:id", async (req, res) => {
@@ -129,136 +137,115 @@ app.delete("/products/:id", async (req, res) => {
   }
 });
 
-
-
-
-
-
 // Category CURD
 
 // Create a category
-app.post("/categories", upload.single('imageUrl'), async(req,res)=>{
+app.post("/categories", upload.single("imageUrl"), async (req, res) => {
   try {
-    console.log(req.file)
-
     // Check if category is already taken
-    const categoryExist = await Category.findOne({name: req.body.name})
-
-    if (categoryExist){
+    const categoryExist = await Category.findOne({ name: req.body.name });
+    if (categoryExist) {
       return res.status(409).json({
-        message:"Name is already taken, Please choose different name",
-      })
+        message: "Name is already taken, Please choose different name",
+      });
     }
 
-    const newCategory = await new Category(req.body).save()
+    // Handle the image upload before saving to database.
+    // console.log(req.file)
+
+    const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path);
+    //  console.log(cloudinaryResponse, "Hello its cloudinary exists")
+
+    const newCategory = await new Category({
+      ...req.body,
+      imageUrl: cloudinaryResponse.secure_url,
+    }).save();
     return res.status(201).json({
       message: "Category is created succesfully",
       data: newCategory,
-    })
-    
+    });
   } catch (error) {
     console.log("Error in creating a product", error);
     return res.status(500).json({
       message: "Internal server error",
     });
   }
-
-})
-
+});
 
 // GET category
-app.get("/categories", async(req,res)=>{
+app.get("/categories", async (req, res) => {
   try {
-
-
-     // Handle the image upload before saving to database.
-
-
-    const allCategories = await Category.find()
+    const allCategories = await Category.find();
     return res.status(200).json({
-      message:"All Product created succesfully",
+      message: "All Product created succesfully",
       data: allCategories,
-    })
-    
+    });
   } catch (error) {
     return res.status(500).json({
-      message: "Internal server error", error
+      message: "Internal server error",
+      error,
     });
-    
   }
-  
-})
+});
 
+app.get("/categories/:id", async (req, res) => {
+  try {
+    const singleCategory = await Category.findById(req.params.id);
 
-app.get("/categories/:id", async(req,res)=>{
-  try { 
-    const singleCategory = await Category.findById(req.params.id)
-
-    if (!singleCategory){
+    if (!singleCategory) {
       return res.status(404).json({
-        message: "Category not found"
-      })
+        message: "Category not found",
+      });
     }
 
     return res.status(200).json({
       message: "Single Category fetched succesfully",
       data: singleCategory,
-    })
-    
+    });
   } catch (error) {
     return res.status(500).json({
       message: "Internal server error",
     });
   }
-  
-})
+});
 
-
-app.patch("/categories/:id", async(req,res)=>{
-  try { 
-    // find by id and update 
-    const updatedCategory = await Category.findByIdAndUpdate (req.params.id, req.body, {new:true})
+app.patch("/categories/:id", async (req, res) => {
+  try {
+    // find by id and update
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     return res.status(200).json({
       message: "Category updated succesfully",
       data: updatedCategory,
-    })
-    
+    });
   } catch (error) {
     return res.status(500).json({
       message: "Internal server error",
     });
-    
-  } 
-})
+  }
+});
 
-
-app.delete("/categories/:id", async(req,res)=>{
+app.delete("/categories/:id", async (req, res) => {
   try {
-    const deletedCategory = await Category.findByIdAndDelete(req.params.id)
-    if(!deletedCategory){
+    const deletedCategory = await Category.findByIdAndDelete(req.params.id);
+    if (!deletedCategory) {
       return res.status(404).json({
-        message: "Category not found"
-      })
+        message: "Category not found",
+      });
     }
     return res.status(200).json({
       message: "Category daleted succesfully",
       data: deletedCategory,
-    })
-    
+    });
   } catch (error) {
     return res.status(500).json({
       message: "Internal server error",
     });
   }
-})
-
-
-
-
-
-
-
-
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World");
