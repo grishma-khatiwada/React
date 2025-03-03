@@ -5,10 +5,10 @@ import { createProduct, getAllProduct, getProductById, updateProductById } from 
 import { deleteCategoryById } from "../controller/categoryController.js";
 const upload = multer({ dest: "uploads/" });
 
-router.post("/", createProduct)
+router.post("/", upload.single("imageUrl"), createProduct)
 router.get("/", getAllProduct)
 router.get("/:id", getProductById)
-router.patch("/:id", updateProductById)
+router.patch("/:id", upload.single("imageUrl"), updateProductById)
 router.delete("/:id", deleteCategoryById)
 
 export default router

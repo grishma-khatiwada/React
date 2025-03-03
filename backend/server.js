@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import "dotenv/config";
 import categoryRoute from "./routes/categoryRoute.js";
 import productRoute from "./routes/productRoute.js";
+import userRoute from "./routes/userRoute.js";
+
+
 
 // Middleware(Multer)
 
@@ -27,9 +30,10 @@ try {
 
 app.use("/categories", categoryRoute);
 app.use("/products", productRoute);
+app.use("/users", userRoute)
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Backend is running succesfully on our system");
 });
 
 app.listen(process.env.APP_PORT, () => {
