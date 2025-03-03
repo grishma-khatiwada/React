@@ -18,8 +18,7 @@ app.use(express.json());
 
 // Database Config
 try {
-  mongoose.connect(
-    "mongodb+srv://grishmakhatiwada76:ZaSYLoR9QzazOZzV@cluster0.inn1u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  mongoose.connect( process.env.MONGODB_URI
   );
   console.log("MongoDB connected syccesfully");
 } catch (error) {
@@ -33,6 +32,6 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.listen(4000, () => {
-  console.log("server is running on port 4000");
+app.listen(process.env.APP_PORT, () => {
+  console.log(`server is running on http://localhost:${process.env.APP_PORT}`);
 });
