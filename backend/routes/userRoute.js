@@ -1,14 +1,14 @@
 import express from "express"
-import { DeleteUserById, getAllUser, getUserById, loginUser, registerUser, UpdateUserById } from "../controller/userController.js"
+import { deleteUserById,getAllUsers, getSingleUserById, loginUser, registerUser, updateUserById} from "../controller/userController.js"
 const router = express.Router()
 
 
 router.post("/register", registerUser)
 router.post("/login", loginUser)
-router.get("/", getAllUser)
-router.patch("/:id", getUserById)
-router.patch("/:id", UpdateUserById)
-router.delete("/:id", DeleteUserById)
+router.get("/", getAllUsers)
+router.patch("/:id", getSingleUserById)
+router.patch("/:id", updateUserById)
+router.delete("/:id", deleteUserById)
 
 
 export default router

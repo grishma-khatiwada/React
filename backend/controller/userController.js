@@ -1,121 +1,134 @@
-import { User } from "../schema/userSchema.js"
+import { User } from "../schema/userSchema.js";
 import bcrypt from "bcrypt"
 const saltRounds = 10;
-// saltround is complexicity
+import jwt from "jsonwebtoken";
+//saltrounds 10 means complexity of password 
+//Create User
+export const registerUser= async(req,res)=>{
+  try {
+   // Check if user already exists
+   const userExists = await User.findOne({email:req.body.email}) 
+   if(userExists){
+    return res.status(409).json({
+        message: "user already exists with this email please choose another email",
+    })
+   }
+    //Hash the before saving it to the database
+   const hashedPassword= await bcrypt.hash(req.body.password,saltRounds);
+   console.log(hashedPassword)
 
-import jwt from "jsonwebtoken"
+     const newRegisteredUser= await new User({...req.body,password:hashedPassword}).save();
+     return res.status(201).json({
+        message:"User registered successfully",
+        data:newRegisteredUser,
+     })
 
 
-// Create User
-export const registerUser = async (req,res) =>{
+  } catch (error) {
+    return res.status(500).json({
+        message: "Error while registering",
+        error: error,
+      });
+  }
+
+};
+
+// Login user
+export const loginUser= async(req,res)=>{
     try {
-
-        // Check if user already exist
-        const userExists = await User.findOne({email: req.body.email})
-        if(userExists){
-            return res.status(409).json({
-                message: "User already exists with this email please choose another email",
-            })
-        }
-
-        // HASH the password before saving it to the database(Library-npm bcrypt)
-        const hashedPassword = await bcrypt.hash(req.body.password, saltRounds)
-        console.log(hashedPassword)
-
-
-        const newRegisteredUser = await new User({...req.body, password:hashedPassword}).save()
-        return res.status(201).json({
-            message: "User registered succesfully",
-            data: newRegisteredUser,
-        })
         
-    } catch (error) {
-        return res.status(500).json({
-            message:"Error while registering user",
-            error: error,
-        })
-        
-    }
-}
-
-
-
-// Login USer
-export const loginUser = async (req,res) =>{
-    try {
-        // check if user exists or not 
-        const userExists = await User.findOne({email: req.body.email})
+        //Check user exist or not 
+        const userExists = await User.findOne({email:req.body.email}) 
         if(!userExists){
-            return res.status(409).json({
-                message: "You are not registered yet, Please register before login",
+         return res.status(409).json({
+             message: "You are not registered yest, Please register before login",
+         })
+        }
+        //If user exist compare the password
+        const isPasswordMatched= await bcrypt.compare(req.body.password,userExists.password);
+        if(!isPasswordMatched){
+            return res.status(401).json({
+                message:"password is not correct"
             })
         }
-// If user exist compare the password
-       const isPasswordMatch = await bcrypt.compare (req.body.password, userExists.password)
-       if(!isPasswordMatch){
-        return res.status(409).json({
-        message: "Incorrect Password"
-    })
-       }
-    
-
-    //    If password match then generate the jwt(json web token) token
-    const myToken = jwt.sign({email: userExists.email}, "this_is_private_key",{ expiresIn: "24h" })
-    console.log(myToken)
-    return res.status(200).json({
-        message:"User logged in succesfully",
-        token: myToken,
-        user: userExists,
-    })
-
-        
-    } catch (error) {
-        return res.status(500).json({
-            message:"Error while registering user",
-            error: error,
-        })
-
-        
-    }
-}
-
-
-
-
-
-
-
-
-// Get All User
-export const getAllUser = async (req,res) =>{
-    try {
-        const allUsers = await User.find()
+        // If password match then generate the jwt token 
+        const myToken = await jwt.sign({email:userExists.email},"this_is_private_key",{expiresIn:"1h"})
+        console.log(myToken)
         return res.status(200).json({
-            message:"All users fetched succesfully",
-            data: allUsers,
+            message:"User login successfully",
+            token: myToken,
+            user:userExists,
         })
-        
+
     } catch (error) {
         return res.status(500).json({
-            message:"Eror in fetched",
-            error: allUsers,
-        })
+            message: "Error while login user",
+            error: error,
+          });
     }
-}
+};
 
+// Get all user
+export const getAllUsers = async(req,res)=>{
+    try {
+        const allUsers = await User.find();
+        return res.status(200).json({
+            message: "All users fetched successfully",
+            data: allUsers,
+          });
+    } catch (error) {
+        return res.status(500).json({ 
+            message: "Error in fetching users",
+            error: error, 
 
+        });
+    }
+};
 
+// Get single  user by id
+export const getSingleUserById = async (req, res) => {
+    try {
+      const AllUsers = await User.findById();
+      return res.status(200).json({
+        message: "All user fetch successfully.",
+        data: AllUsers,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal server error.",
+      });
+    }
+  };
 
+//Update user by id
+export const updateUserById = async (req, res) => {
+    try {
+      const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      return res.status(200).json({
+        message: "User data update Successfully.",
+        data: updateUser,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal server error.",
+      });
+    }
+  };
+  
 
-
-// Get User by Id
-export const getUserById = async (req,res) =>{}
-
-// Update User by Id
-export const UpdateUserById = async (req,res) =>{}
-
-// Delete User by Id
-export const DeleteUserById = async (req,res) =>{}
-
-
-
+// Delete user by id
+export const deleteUserById = async (req, res) => {
+    try {
+      const deleteUser = await User.findByIdAndDelete(req.params.id);
+      return res.status(200).json({
+        message: "User data delete successfully.",
+        data: deleteUser,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal server error.",
+      });
+    }
+  };
