@@ -4,7 +4,7 @@ import "dotenv/config";
 import categoryRoute from "./routes/categoryRoute.js";
 import productRoute from "./routes/productRoute.js";
 import userRoute from "./routes/userRoute.js";
-
+import cors from  "cors"
 
 
 // Middleware(Multer)
@@ -18,6 +18,9 @@ const app = express();
 
 // Middleware (in uilt middleware)
 app.use(express.json());
+app.use (cors(
+  
+))
 
 // Database Config
 try {
