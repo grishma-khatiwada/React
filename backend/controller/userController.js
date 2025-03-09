@@ -103,13 +103,29 @@ export const getSingleUserById = async (req, res) => {
 //Update user by id
 export const updateUserById = async (req, res) => {
     try {
-      const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-      });
+
+      // if password is given for update 
+      if(registerUser.body.password){
+        const newHashedPassword = await bcrypt.hash(req.body.password,saltRounds);
+        const updateUser = await User.findOneAndUpdate(req.body.email,{...req.body, password:newHashedPassword},{new:true})
+      }
       return res.status(200).json({
-        message: "User data update Successfully.",
+        message: "User updated with password successfully ",
         data: updateUser,
+        error: error,
       });
+
+      const updateUser = await User.findOneAndUpdate(req.body.email,req.body,{new:true})
+      return res.status(200).json({
+        message: "User updated successfully ",
+        data: updateUser,
+        error: error,
+      });
+
+
+
+
+
     } catch (error) {
       return res.status(500).json({
         message: "Internal server error.",

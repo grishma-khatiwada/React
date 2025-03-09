@@ -8,7 +8,6 @@ import cors from  "cors"
 
 
 // Middleware(Multer)
-
 // cloudinary (Data storage)
 // v2 as clodinary is like remaining v2 as cloudinary
 
@@ -19,7 +18,9 @@ const app = express();
 // Middleware (in uilt middleware)
 app.use(express.json());
 app.use (cors(
-  
+  {
+    origin: "http://localhost:5173",
+  }
 ))
 
 // Database Config
