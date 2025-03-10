@@ -6,7 +6,7 @@ import { deleteCategoryById } from "../controller/categoryController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 const upload = multer({ dest: "uploads/" });
 
-router.post("/", verifyToken, upload.single("imageUrl"), createProduct)
+router.post("/", upload.single("imageUrl"), createProduct)
 router.get("/", getAllProduct)
 router.get("/:id", getProductById)
 router.patch("/:id", verifyToken, upload.single("imageUrl"), updateProductById)
